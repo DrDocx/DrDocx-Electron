@@ -24,7 +24,7 @@ const styles = (theme: Theme) =>
       zIndex: 0,
     },
     menuButton: {
-      marginLeft: -theme.spacing(1),
+      marginRight: theme.spacing(1),
     },
     iconButtonAvatar: {
       padding: 4,
@@ -50,23 +50,16 @@ function Header(props: HeaderProps) {
 
   return (
     <React.Fragment>
-      <AppBar
-        component="div"
-        className={classes.secondaryBar}
-        color="primary"
-        position="static"
-        elevation={0}
-      >
-        <Toolbar>
-          <Grid container alignItems="center" spacing={1}>
-            <Grid item xs>
-              <Typography color="inherit" variant="h5" component="h1">
-                Patients
-              </Typography>
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
+      <AppBar position="static" color = 'primary' >
+  <Toolbar>
+    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+      <MenuIcon />
+    </IconButton>
+    <Typography variant="h6" className={classes.title}>
+      Patients
+    </Typography>
+  </Toolbar>
+</AppBar>
     </React.Fragment>
   );
 }

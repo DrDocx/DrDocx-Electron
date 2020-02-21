@@ -32,7 +32,7 @@ let theme = createMuiTheme({
   palette: {
     primary: {
       light: '#63ccff',
-      main: '#009be5',
+      main: '#103C60',
       dark: '#006db3',
     },
   },
@@ -188,10 +188,11 @@ function Paperbase(props: PaperbaseProps) {
               variant="temporary"
               open={mobileOpen}
               onClose={handleDrawerToggle}
+              active = 'Patients'
             />
           </Hidden>
           <Hidden xsDown implementation="css">
-            <Navigator PaperProps={{ style: { width: drawerWidth } }} />
+            <Navigator PaperProps={{ style: { width: drawerWidth } }} active = 'Patients' />
           </Hidden>
         </nav>
         <div className={classes.app}>
