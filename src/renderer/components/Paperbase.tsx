@@ -194,10 +194,15 @@ class Paperbase extends React.Component<PaperbaseProps, PaperbaseState> {
       openDrawer: props.openDrawer
     };
     this.toggleDrawer.bind(this);
+    this.switchTabs.bind(this);
   }
 
   toggleDrawer(): void {
     this.setState({openDrawer: !this.state.openDrawer});
+  }
+
+  switchTabs(tab: string): void {
+    this.setState({activeTab: tab,});
   }
 
   render(): any {
@@ -211,6 +216,7 @@ class Paperbase extends React.Component<PaperbaseProps, PaperbaseState> {
           <nav className={classes.drawer}>
             <Navigator
               activeTab={this.state.activeTab}
+              switchTabs = {(tab: string) => {this.switchTabs(tab);}}
               PaperProps={{ style: { width: drawerWidth } }}
               variant='persistent'
               open={this.state.openDrawer}
@@ -218,10 +224,9 @@ class Paperbase extends React.Component<PaperbaseProps, PaperbaseState> {
             />
           </nav>
           <div className={clsx(classes.app, this.state.openDrawer && classes.appShiftfront)} >
-            <Header onDrawerToggle={() => { }} />
+            <Header onDrawerToggle={() => {this.toggleDrawer();}} activeTab = {this.state.activeTab} />
             <main className={classes.main}>
               <Content activeTab={this.state.activeTab} />
-              <Button onClick = {() => {this.toggleDrawer();}} >Hello</Button>
             </main>
             <footer className={classes.footer}>
               <Copyright />

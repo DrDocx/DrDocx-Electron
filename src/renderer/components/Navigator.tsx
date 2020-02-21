@@ -128,7 +128,7 @@ class NavBarSubCategory extends React.Component<NavBarSubCategoryProps, NavBarSu
   }
 }
 
-export interface NavigatorProps extends Omit<DrawerProps, 'classes'>, WithStyles<typeof styles> { activeTab: string; }
+export interface NavigatorProps extends Omit<DrawerProps, 'classes'>, WithStyles<typeof styles> { activeTab: string; switchTabs: (tab: string) => void; }
 
 export interface NavigatorState { activeTab: string; }
 
@@ -139,15 +139,16 @@ class Navigator extends React.Component<NavigatorProps,NavigatorState> {
     this.state = {
       activeTab: props.activeTab,
     };
-    this.setActiveSubCategory.bind(this);
   }
 
-  setActiveSubCategory(subcategory: string): void {
-    this.setState({activeTab: subcategory});
+  static getDerivedStateFromProps(props: NavigatorProps,state: NavigatorState): object {
+    return {
+      activeTab: props.activeTab,
+    };
   }
 
   render(): any {
-    const {classes, activeTab, ...other } = this.props;
+    const {classes, activeTab, switchTabs, ...other } = this.props;
 
     return (
       <Drawer {...other}>
@@ -167,7 +168,7 @@ class Navigator extends React.Component<NavigatorProps,NavigatorState> {
                 </ListItemText>
               </ListItem>
               {children.map(({ id: childId, icon }: { id: string, icon: JSX.Element }) => (
-                <NavBarSubCategory id = {childId} key = {childId} active = {childId === this.state.activeTab} icon = {icon} classes = {classes} myClick = {() => {this.setActiveSubCategory(childId)}} />
+                <NavBarSubCategory id = {childId} key = {childId} active = {childId === this.state.activeTab} icon = {icon} classes = {classes} myClick = {() => {switchTabs(childId);}} />
               ))}
               <Divider className={classes.divider} />
             </React.Fragment>

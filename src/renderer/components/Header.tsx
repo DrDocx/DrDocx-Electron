@@ -44,27 +44,43 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface HeaderProps extends WithStyles<typeof styles> {
-  onDrawerToggle: () => void;
-}
+interface HeaderProps extends WithStyles<typeof styles> { onDrawerToggle: () => void; activeTab: string; }
 
-function Header(props: HeaderProps) {
-  const { classes, onDrawerToggle } = props;
+interface HeaderState { activeTab: string; }
 
-  return (
-    <React.Fragment>
-      <AppBar position="static" color = 'primary' >
-  <Toolbar>
-    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-      <MenuIcon />
-    </IconButton>
-    <Typography variant="h6" className={classes.title}>
-      Patients
-    </Typography>
-  </Toolbar>
-</AppBar>
-    </React.Fragment>
-  );
+class Header extends React.Component<HeaderProps,HeaderState> {
+
+  constructor(props: HeaderProps) {
+    super(props);
+    this.state = {
+      activeTab: props.activeTab,
+    }
+  }
+
+  static getDerivedStateFromProps(props: HeaderProps,state: HeaderState): object {
+    return {
+      activeTab: props.activeTab,
+    };
+  }
+
+  render(): any {
+    const { classes, onDrawerToggle } = this.props;
+
+    return (
+      <React.Fragment>
+        <AppBar position="static" color = 'primary' >
+    <Toolbar>
+      <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={() => {onDrawerToggle();}} >
+        <MenuIcon />
+      </IconButton>
+      <Typography variant="h6" className={classes.title}>
+        {this.state.activeTab}
+      </Typography>
+    </Toolbar>
+  </AppBar>
+      </React.Fragment>
+    );
+  }
 }
 
 export default withStyles(styles)(Header);

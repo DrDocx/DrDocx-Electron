@@ -49,6 +49,12 @@ class Content extends React.Component<ContentProps, ContentState> {
     };
   }
 
+  static getDerivedStateFromProps(props: ContentProps,state: ContentState): object {
+    return {
+      activeTab: props.activeTab,
+    };
+  }
+
   render(): any {
     const { classes } = this.props;
     switch (this.state.activeTab) {
