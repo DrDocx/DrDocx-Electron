@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  Theme,
   createMuiTheme,
   createStyles,
   ThemeProvider,
@@ -11,9 +12,12 @@ import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Navigator from './Navigator';
-import PatientsContent from './PatientsContent';
+import Content from './Content';
 import PatientFieldsContent from './PatientFieldsContent';
 import Header from './Header';
+import clsx from 'clsx';
+import { Button } from '@material-ui/core';
+
 
 function Copyright() {
   return (
@@ -138,7 +142,7 @@ theme = {
   },
 };
 
-const drawerWidth = 256;
+const drawerWidth = 200;
 
 const styles = createStyles({
   root: {
@@ -146,15 +150,25 @@ const styles = createStyles({
     minHeight: '100vh',
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
+    width: drawerWidth,
+    flexShrink: 0,
   },
   app: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    transition: theme.transitions.create(['margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    marginLeft: -drawerWidth,
+  },
+  appShiftfront: {
+    transition: theme.transitions.create(['margin'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    }),
+    marginLeft: 0,
   },
   main: {
     flex: 1,
@@ -167,46 +181,56 @@ const styles = createStyles({
   },
 });
 
-export interface PaperbaseProps extends WithStyles<typeof styles> {}
+export interface PaperbaseProps extends WithStyles<typeof styles> { activeTab: string; openDrawer: boolean; }
 
-function Paperbase(props: PaperbaseProps) {
-  const { classes } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+export interface PaperbaseState { activeTab: string; openDrawer: boolean; }
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+class Paperbase extends React.Component<PaperbaseProps, PaperbaseState> {
 
-  return (
-    <ThemeProvider theme={theme}>
-      <div className={classes.root}>
-        <CssBaseline />
-        <nav className={classes.drawer}>
-          <Hidden smUp implementation="js">
+  constructor(props: PaperbaseProps) {
+    super(props);
+    this.state = {
+      activeTab: props.activeTab,
+      openDrawer: props.openDrawer
+    };
+    this.toggleDrawer.bind(this);
+  }
+
+  toggleDrawer(): void {
+    this.setState({openDrawer: !this.state.openDrawer});
+  }
+
+  render(): any {
+
+    const { classes, activeTab, openDrawer, ...other } = this.props;
+
+    return (
+      <ThemeProvider theme={theme}>
+        <div className={classes.root}>
+          <CssBaseline />
+          <nav className={classes.drawer}>
             <Navigator
+              activeTab={this.state.activeTab}
               PaperProps={{ style: { width: drawerWidth } }}
-              variant="temporary"
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-              active = 'Patients'
+              variant='persistent'
+              open={this.state.openDrawer}
+              onClose={() => { }}
             />
-          </Hidden>
-          <Hidden xsDown implementation="css">
-            <Navigator PaperProps={{ style: { width: drawerWidth } }} active = 'Patients' />
-          </Hidden>
-        </nav>
-        <div className={classes.app}>
-          <Header onDrawerToggle={handleDrawerToggle} />
-          <main className={classes.main}>
-            <PatientsContent />
-          </main>
-          <footer className={classes.footer}>
-            <Copyright />
-          </footer>
+          </nav>
+          <div className={clsx(classes.app, this.state.openDrawer && classes.appShiftfront)} >
+            <Header onDrawerToggle={() => { }} />
+            <main className={classes.main}>
+              <Content activeTab={this.state.activeTab} />
+              <Button onClick = {() => {this.toggleDrawer();}} >Hello</Button>
+            </main>
+            <footer className={classes.footer}>
+              <Copyright />
+            </footer>
+          </div>
         </div>
-      </div>
-    </ThemeProvider>
-  );
+      </ThemeProvider>
+    );
+  }
 }
 
 export default withStyles(styles)(Paperbase);

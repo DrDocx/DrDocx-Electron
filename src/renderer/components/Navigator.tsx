@@ -106,14 +106,14 @@ class NavBarSubCategory extends React.Component<NavBarSubCategoryProps, NavBarSu
 
   render(): any {
 
-    const { classes, ...other } = this.props;
+    const { classes, active, id, icon, myClick, ...other } = this.props;
 
     return (
       <ListItem
         key={this.state.id}
         button={true}
         className={clsx(classes.item, this.state.active && classes.itemActiveItem)}
-        onClick = {() => {this.props.myClick();this.render();}}
+        onClick = {() => {this.props.myClick();}}
       >
         <ListItemIcon className={classes.itemIcon}>{this.state.icon}</ListItemIcon>
         <ListItemText
@@ -128,29 +128,29 @@ class NavBarSubCategory extends React.Component<NavBarSubCategoryProps, NavBarSu
   }
 }
 
-export interface NavigatorProps extends Omit<DrawerProps, 'classes'>, WithStyles<typeof styles> { active: string; }
+export interface NavigatorProps extends Omit<DrawerProps, 'classes'>, WithStyles<typeof styles> { activeTab: string; }
 
-export interface NavigatorState { active: string; }
+export interface NavigatorState { activeTab: string; }
 
 class Navigator extends React.Component<NavigatorProps,NavigatorState> {
 
-  constructor(props: any) {
+  constructor(props: NavigatorProps) {
     super(props);
     this.state = {
-      active: props.active,
+      activeTab: props.activeTab,
     };
     this.setActiveSubCategory.bind(this);
   }
 
   setActiveSubCategory(subcategory: string): void {
-    this.setState({active: subcategory});
+    this.setState({activeTab: subcategory});
   }
 
   render(): any {
-    const { classes, ...other } = this.props;
+    const {classes, activeTab, ...other } = this.props;
 
     return (
-      <Drawer variant="permanent" {...other}>
+      <Drawer {...other}>
         <List disablePadding>
           <ListItem className={clsx(classes.firebase, classes.item, classes.itemCategory)}>
             <img src={require('../images/logo.png')} width='144' height='75' />
@@ -167,7 +167,7 @@ class Navigator extends React.Component<NavigatorProps,NavigatorState> {
                 </ListItemText>
               </ListItem>
               {children.map(({ id: childId, icon }: { id: string, icon: JSX.Element }) => (
-                <NavBarSubCategory id = {childId} key = {childId} active = {childId === this.state.active} icon = {icon} classes = {classes} myClick = {() => {this.setActiveSubCategory(childId)}} />
+                <NavBarSubCategory id = {childId} key = {childId} active = {childId === this.state.activeTab} icon = {icon} classes = {classes} myClick = {() => {this.setActiveSubCategory(childId)}} />
               ))}
               <Divider className={classes.divider} />
             </React.Fragment>

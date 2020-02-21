@@ -31,9 +31,7 @@ class Hello extends React.Component<HelloProps,HelloState> {
 
 const Application = () => (
 	<div>
-		{//<Hello compiler = 'TypeScript' framework = 'React' wasup = 'mybe' />
-		}
-		<Paperbase />
+		<Paperbase activeTab='Patients' openDrawer = {true} />
 	</div>
 );
 

@@ -39,6 +39,9 @@ const styles = (theme: Theme) =>
     button: {
       borderColor: lightColor,
     },
+    title: {
+      flexGrow: 1,
+    }
   });
 
 interface HeaderProps extends WithStyles<typeof styles> {
