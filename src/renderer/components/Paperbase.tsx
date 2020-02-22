@@ -225,7 +225,7 @@ class Paperbase extends React.Component<PaperbaseProps, PaperbaseState> {
           <div className={clsx(classes.app, this.state.openDrawer && classes.appShiftfront)} >
             <Header onDrawerToggle={() => {this.toggleDrawer();}} activeTab = {this.state.activeTab} />
             <main className={classes.main}>
-              <Content activeTab={this.state.activeTab} subTab='default' />
+              <Content activeTab={this.state.activeTab} />
             </main>
             <footer className={classes.footer}>
               <Copyright />
