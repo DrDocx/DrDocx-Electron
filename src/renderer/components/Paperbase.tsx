@@ -13,7 +13,6 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Navigator from './Navigator';
 import Content from './Content';
-import PatientFieldsContent from './PatientFieldsContent';
 import Header from './Header';
 import clsx from 'clsx';
 import { Button } from '@material-ui/core';
@@ -142,7 +141,7 @@ theme = {
   },
 };
 
-const drawerWidth = 200;
+const drawerWidth = 185;
 
 const styles = createStyles({
   root: {
@@ -226,7 +225,7 @@ class Paperbase extends React.Component<PaperbaseProps, PaperbaseState> {
           <div className={clsx(classes.app, this.state.openDrawer && classes.appShiftfront)} >
             <Header onDrawerToggle={() => {this.toggleDrawer();}} activeTab = {this.state.activeTab} />
             <main className={classes.main}>
-              <Content activeTab={this.state.activeTab} />
+              <Content activeTab={this.state.activeTab} subTab='default' />
             </main>
             <footer className={classes.footer}>
               <Copyright />
