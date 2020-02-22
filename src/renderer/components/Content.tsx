@@ -29,7 +29,7 @@ const styles = (theme: Theme) =>
 
 export interface ContentProps extends WithStyles<typeof styles> { activeTab: string; }
 
-export interface ContentState { activeTab: string; subTab: string; }
+export interface ContentState { activeTab: string; }
 
 class Content extends React.Component<ContentProps, ContentState> {
 
@@ -37,7 +37,6 @@ class Content extends React.Component<ContentProps, ContentState> {
 		super(props);
 		this.state = {
 			activeTab: props.activeTab,
-			subTab: 'Default',
 		};
 	}
 
@@ -47,37 +46,21 @@ class Content extends React.Component<ContentProps, ContentState> {
 		};
 	}
 
-	switchSubTab(subtab: string): void {
-		this.setState({ subTab: subtab, });
-	}
-
 	render(): any {
 		const { classes } = this.props;
-		switch (this.state.activeTab) {
-			case 'Patients': {
-				return (
-					<PatientsContent
-						subTab={this.state.subTab}
-						switchSubTab={(subtab: string) => {this.switchSubTab(subtab);}}
-					/>
-				);
-			}
-			case 'Patient Fields': {
-				return (
-					<div>Patient Fields stuff</div>
-				);
-			}
-			case 'Templates': {
-				return (
-					<div>Templates stuff</div>
-				);
-			}
-			default: {
-				return (
-					<div>Page Not Found</div>
-				);
-			}
-		}
+		return (
+			<React.Fragment>
+
+			<PatientsContent
+				hidden={!(this.props.activeTab === 'Patients')}
+			/>
+
+			<div hidden={!(this.props.activeTab === 'Patient Fields')} >Patient Fields stuff</div>
+
+			<div hidden={!(this.props.activeTab === 'Templates')} >Templates stuff</div>
+
+			</React.Fragment>
+		);
 	}
 }
 

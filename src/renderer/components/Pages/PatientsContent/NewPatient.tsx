@@ -1,15 +1,11 @@
 import * as React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
 import { IconButton } from '@material-ui/core';
@@ -23,23 +19,6 @@ import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
 const styles = (theme: Theme) =>
 	createStyles({
-		paper: {
-			maxWidth: 936,
-			margin: 'auto',
-			overflow: 'hidden',
-		},
-		searchBar: {
-			borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-		},
-		searchInput: {
-			fontSize: theme.typography.fontSize,
-		},
-		block: {
-			display: 'block',
-		},
-		addPatient: {
-			marginRight: theme.spacing(1),
-		},
 		contentWrapper: {
 			margin: '40px 16px',
 		},
@@ -49,13 +28,13 @@ const styles = (theme: Theme) =>
 		}
 	});
 
-export interface newPatientProps extends WithStyles<typeof styles> { switchSubTab: (subtab: string) => void; }
+export interface NewPatientProps extends WithStyles<typeof styles> { switchSubTab: (subtab: string) => void; hidden: boolean }
 
-export interface newPatientState { dateOfBirth: Date; }
+export interface NewPatientState { dateOfBirth: Date; }
 
-class newPatient extends React.Component<newPatientProps, newPatientState> {
+class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 
-	constructor(props: newPatientProps) {
+	constructor(props: NewPatientProps) {
 		super(props);
 		this.state = {
 			dateOfBirth: new Date(),
@@ -65,11 +44,11 @@ class newPatient extends React.Component<newPatientProps, newPatientState> {
 	render(): any {
 		const { classes } = this.props;
 		return (
-			<React.Fragment>
+			<div hidden={this.props.hidden} >
 				<IconButton color='primary' onClick={() => { this.props.switchSubTab('Default'); }} >
 					<ArrowBackIcon />
 				</IconButton>Back
-						<div className={clsx(classes.contentWrapper, classes.centerForm)} >
+					<div className={clsx(classes.contentWrapper, classes.centerForm)} >
 					<Typography variant="h6" gutterBottom>
 						New Patient
 							</Typography>
@@ -132,9 +111,9 @@ class newPatient extends React.Component<newPatientProps, newPatientState> {
 						</Grid>
 					</Grid>
 				</div>
-			</React.Fragment>
+			</div>
 		);
 	}
 }
 
-export default withStyles(styles)(newPatient);
+export default withStyles(styles)(NewPatient);
