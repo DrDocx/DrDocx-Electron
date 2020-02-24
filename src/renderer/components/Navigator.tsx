@@ -12,6 +12,7 @@ import PostAddIcon from '@material-ui/icons/PostAdd';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import InsertChartIcon from '@material-ui/icons/InsertChart';
 import InputIcon from '@material-ui/icons/Input';
+import PeopleIcon from '@material-ui/icons/People';
 
 import TimerIcon from '@material-ui/icons/Timer';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -23,17 +24,16 @@ var categories = [
   {
     id: 'Develop',
     children: [
-      { id: 'Patients', icon: <AssignmentIndIcon /> },
+      { id: 'Patients', icon: <PeopleIcon /> },
       { id: 'Patient Fields', icon: <InputIcon /> },
       { id: 'Templates', icon: <PostAddIcon /> },
+      { id: 'Tests', icon: <AssignmentIndIcon /> }
     ],
   },
   {
     id: 'Settings',
     children: [
       { id: 'Account', icon: <SettingsIcon /> },
-      { id: 'Privacy', icon: <TimerIcon /> },
-      { id: 'Analytics', icon: <PhonelinkSetupIcon /> },
     ],
   },
 ];

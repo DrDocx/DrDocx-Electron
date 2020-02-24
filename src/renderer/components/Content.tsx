@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import PatientsContent from './Pages/PatientsContent/PatientsContent';
+import PatientFieldsContent from './Pages/PatientFieldsContent/PatientFieldsContent';
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -51,11 +52,9 @@ class Content extends React.Component<ContentProps, ContentState> {
 		return (
 			<React.Fragment>
 
-			<PatientsContent
-				hidden={!(this.props.activeTab === 'Patients')}
-			/>
+			<PatientsContent hidden={!(this.props.activeTab === 'Patients')} />
 
-			<div hidden={!(this.props.activeTab === 'Patient Fields')} >Patient Fields stuff</div>
+			<PatientFieldsContent hidden={!(this.props.activeTab === 'Patient Fields')} />
 
 			<div hidden={!(this.props.activeTab === 'Templates')} >Templates stuff</div>
 

@@ -37,7 +37,7 @@ let theme = createMuiTheme({
       light: '#63ccff',
       main: '#103C60',
       dark: '#006db3',
-    },
+	},
   },
   typography: {
     h5: {

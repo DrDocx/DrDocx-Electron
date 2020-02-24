@@ -22,7 +22,7 @@ const styles = (theme: Theme) =>
 		contentWrapper: {
 			margin: '40px 16px',
 		},
-		centerForm: {
+		centerContent: {
 			width: '70%',
 			marginLeft: '15%',
 		}
@@ -34,11 +34,34 @@ export interface NewPatientState { dateOfBirth: Date; }
 
 class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 
+	private Name: React.RefObject<any>;
+	private MedicalRecordNumber: React.RefObject<any>;
+	private DateOfBirth: React.RefObject<any>;
+	private Notes: React.RefObject<any>;
 	constructor(props: NewPatientProps) {
 		super(props);
 		this.state = {
 			dateOfBirth: new Date(),
 		};
+		this.submit.bind(this);
+		this.Name = React.createRef();
+		this.MedicalRecordNumber = React.createRef();
+		this.DateOfBirth = React.createRef();
+		this.Notes = React.createRef();
+	}
+
+	submit(): void {
+		console.log(JSON.stringify({
+			name:this.Name.current.value,
+			medical_record_number: this.MedicalRecordNumber.current.value,
+			dateOfBirth: this.state.dateOfBirth,
+			notes: this.Notes.current.value,
+		}));
+		this.Name.current.value = '';
+		this.MedicalRecordNumber.current.value='';
+		this.setState({dateOfBirth: new Date(),})
+		this.Notes.current.value='';
+		this.props.switchSubTab('Default');
 	}
 
 	render(): any {
@@ -48,30 +71,30 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 				<IconButton color='primary' onClick={() => { this.props.switchSubTab('Default'); }} >
 					<ArrowBackIcon />
 				</IconButton>Back
-					<div className={clsx(classes.contentWrapper, classes.centerForm)} >
+					<div className={clsx(classes.contentWrapper, classes.centerContent)} >
 					<Typography variant="h6" gutterBottom>
 						New Patient
-							</Typography>
+					</Typography>
 					<Grid container spacing={2} >
 						<Grid item xs={12} sm={6}>
 							<TextField
 								required
-								variant='outlined'
+								variant='standard'
 								id="Name"
-								name="Name"
 								label="Name"
 								fullWidth
 								autoComplete="name"
+								inputRef={this.Name}
 							/>
 						</Grid>
 						<Grid item xs={12} sm={6}>
 							<TextField
 								required
-								variant='outlined'
-								id="Medical Record Number"
-								name="Medical Record Number"
+								variant='standard'
+								id="MedicalRecordNumber"
 								label="Medical Record Number"
 								fullWidth
+								inputRef={this.MedicalRecordNumber}
 							/>
 						</Grid>
 						<Grid item xs={12} sm={6} >
@@ -80,7 +103,7 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 									required
 									variant='dialog'
 									margin="none"
-									id="date-of-birth"
+									id="DateOfBirth"
 									label="Date of Birth"
 									format="MM/dd/yyyy"
 									value={this.state.dateOfBirth}
@@ -93,12 +116,14 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 						</Grid>
 						<Grid item xs={12} >
 							<TextField
+								id='Notes'
 								label='Notes'
 								variant='outlined'
 								multiline
 								rows={4}
 								rowsMax={6}
 								fullWidth
+								inputRef={this.Notes}
 							/>
 						</Grid>
 					</Grid>
@@ -107,7 +132,7 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 							<Button variant='contained' color='primary' ><AddIcon />Field</Button>
 						</Grid>
 						<Grid item container xs={6} justify='flex-end' >
-							<Button variant='contained' color='primary' >Submit</Button>
+							<Button variant='contained' color='primary' onClick={()=>this.submit()} >Submit</Button>
 						</Grid>
 					</Grid>
 				</div>

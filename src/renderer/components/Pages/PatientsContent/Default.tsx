@@ -74,11 +74,11 @@ class Default extends React.Component<DefaultProps, DefaultState> {
 								</Grid>
 								<Grid item>
 									<Button
-										variant="contained"
+										variant="outlined"
 										color="primary"
 										className={classes.addPatient}
 										onClick={() => { this.props.switchSubTab('NewPatient'); }} >
-										<AddIcon />Patient
+										New Patient
 										</Button>
 								</Grid>
 							</Grid>
