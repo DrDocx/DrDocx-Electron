@@ -52,10 +52,10 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 
 	submit(): void {
 		console.log(JSON.stringify({
-			name:this.Name.current.value,
-			medical_record_number: this.MedicalRecordNumber.current.value,
-			dateOfBirth: this.state.dateOfBirth,
-			notes: this.Notes.current.value,
+			'name':this.Name.current.value,
+			'medicalRecordNumber': this.MedicalRecordNumber.current.value,
+			'dateOfBirth': this.state.dateOfBirth,
+			'notes': this.Notes.current.value,
 		}));
 		this.Name.current.value = '';
 		this.MedicalRecordNumber.current.value='';
