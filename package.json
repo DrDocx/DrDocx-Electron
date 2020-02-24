@@ -1,7 +1,7 @@
 {
-  "name": "electron-react-typescript",
-  "version": "0.0.7",
-  "description": "",
+  "name": "drdocx-electron",
+  "version": "0.2.0",
+  "description": "Patient data management",
   "main": "./dist/main.js",
   "scripts": {
     "build-main": "cross-env NODE_ENV=production webpack --config webpack.main.prod.config.js",
@@ -52,11 +52,8 @@
     }
   },
   "build": {
-    "productName": "ProductName",
-    "appId": "org.your.productname",
-    "mac": {
-      "category": "your.app.category.type"
-    },
+    "productName": "DrDocx",
+    "appId": "org.DrDocx.Electron",
     "directories": {
       "output": "release"
     },
@@ -74,17 +71,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com:Robinfr/electron-react-typescript.git"
+    "url": "https://github.com/DrDocx/DrDocx-Electron.git"
   },
   "author": {
-    "name": "Your name",
-    "email": "Your email"
+    "name": "DrDocx",
+    "email": "drdocx.dev@gmail.com"
   },
-  "license": "SEE LICENSE",
+  "license": "Copyright (c) DrDocx 2020 - All Rights Reserved",
   "bugs": {
-    "url": "https://github.com/Robinfr/electron-react-typescript/issues"
+    "url": "https://github.com/DrDocx/DrDocx-Electron/issues"
   },
-  "homepage": "https://github.com/Robinfr/electron-react-typescript",
+  "homepage": "https://github.com/DrDocx/DrDocx-Electron",
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
