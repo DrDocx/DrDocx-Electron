@@ -17,7 +17,7 @@ const styles = (theme: Theme) =>
 		}
 	});
 
-export interface DefaultProps extends WithStyles<typeof styles> { switchSubTab: (subtab: string) => void; hidden: boolean }
+export interface DefaultProps extends WithStyles<typeof styles> { switchSubTab: (subtab: string) => void; }
 
 export interface DefaultState { }
 
@@ -26,14 +26,12 @@ class Default extends React.Component<DefaultProps, DefaultState> {
 	render(): any {
 		const { classes } = this.props;
 		return (
-			<div hidden={this.props.hidden} >
-				<div className={clsx(classes.contentWrapper,classes.centerContent)} >
-					<Grid container spacing={2} justify='center' >
-						<Grid item container justify='center' xs={12} >
-							<Button variant='contained' color='primary' onClick={() => {this.props.switchSubTab('NewField')}} >New Field</Button>
-						</Grid>
+			<div className={clsx(classes.contentWrapper, classes.centerContent)} >
+				<Grid container spacing={2} justify='center' >
+					<Grid item container justify='center' xs={12} >
+						<Button variant='contained' color='primary' onClick={() => { this.props.switchSubTab('NewField') }} >New Field</Button>
 					</Grid>
-				</div>
+				</Grid>
 			</div>
 		);
 	}

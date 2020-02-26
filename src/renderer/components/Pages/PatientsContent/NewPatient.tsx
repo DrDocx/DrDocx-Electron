@@ -12,6 +12,10 @@ import { IconButton } from '@material-ui/core';
 
 import clsx from 'clsx';
 
+import * as rm from 'typed-rest-client/RestClient';
+
+import { PatientInfo } from '../../Models/Patient'
+
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker, } from '@material-ui/pickers';
@@ -28,14 +32,14 @@ const styles = (theme: Theme) =>
 		}
 	});
 
-export interface NewPatientProps extends WithStyles<typeof styles> { switchSubTab: (subtab: string) => void; hidden: boolean }
+export interface NewPatientProps extends WithStyles<typeof styles> { switchSubTab: (subtab: string) => void; }
 
 export interface NewPatientState { dateOfBirth: Date; }
 
 class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 
 	private Name: React.RefObject<any>;
-	private MedicalRecordNumber: React.RefObject<any>;
+	private MedicalID: React.RefObject<any>;
 	private DateOfBirth: React.RefObject<any>;
 	private Notes: React.RefObject<any>;
 	constructor(props: NewPatientProps) {
@@ -45,29 +49,30 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 		};
 		this.submit.bind(this);
 		this.Name = React.createRef();
-		this.MedicalRecordNumber = React.createRef();
+		this.MedicalID = React.createRef();
 		this.DateOfBirth = React.createRef();
 		this.Notes = React.createRef();
 	}
 
-	submit(): void {
-		console.log(JSON.stringify({
+	async submit(): Promise<PatientInfo | null> {
+		let newPatient: object = {
 			'name':this.Name.current.value,
-			'medicalRecordNumber': this.MedicalRecordNumber.current.value,
-			'dateOfBirth': this.state.dateOfBirth,
-			'notes': this.Notes.current.value,
-		}));
+			'dateModified':new Date() as unknown as string,
+		};
+		let rest: rm.RestClient = new rm.RestClient('get-patients', 'https://localhost:1211/', undefined, { ignoreSslError: true });
+		let res: rm.IRestResponse<PatientInfo> = await rest.create<PatientInfo>('api/Patient',newPatient);
 		this.Name.current.value = '';
-		this.MedicalRecordNumber.current.value='';
-		this.setState({dateOfBirth: new Date(),})
+		this.MedicalID.current.value='';
+		this.setState({dateOfBirth: new Date(),});
 		this.Notes.current.value='';
 		this.props.switchSubTab('Default');
+		return res.result;
 	}
 
 	render(): any {
 		const { classes } = this.props;
 		return (
-			<div hidden={this.props.hidden} >
+			<React.Fragment>
 				<IconButton color='primary' onClick={() => { this.props.switchSubTab('Default'); }} >
 					<ArrowBackIcon />
 				</IconButton>Back
@@ -91,10 +96,10 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 							<TextField
 								required
 								variant='standard'
-								id="MedicalRecordNumber"
-								label="Medical Record Number"
+								id="MedicalID"
+								label="Medical ID"
 								fullWidth
-								inputRef={this.MedicalRecordNumber}
+								inputRef={this.MedicalID}
 							/>
 						</Grid>
 						<Grid item xs={12} sm={6} >
@@ -136,7 +141,7 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 						</Grid>
 					</Grid>
 				</div>
-			</div>
+			</React.Fragment>
 		);
 	}
 }

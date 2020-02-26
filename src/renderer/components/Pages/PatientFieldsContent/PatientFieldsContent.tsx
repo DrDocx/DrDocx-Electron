@@ -11,7 +11,7 @@ const styles = (theme: Theme) =>
 	createStyles({
 	});
 
-export interface PatientFieldsContentProps extends WithStyles<typeof styles> { hidden: boolean; }
+export interface PatientFieldsContentProps extends WithStyles<typeof styles> {  }
 
 export interface PatientFieldsContentState { subTab: string; }
 
@@ -37,19 +37,27 @@ class PatientFieldsContent extends React.Component<PatientFieldsContentProps, Pa
 
 	render(): any {
 		const { classes } = this.props;
-		return (
-			<div hidden={this.props.hidden} >
-				<Default
-					switchSubTab={(subtab: string) => { this.switchSubTab(subtab); }}
-					hidden={!(this.state.subTab === 'Default')}
-				/>
-
-				<NewField
-					switchSubTab={(subtab: string) => { this.switchSubTab(subtab); }}
-					hidden={!(this.state.subTab === 'NewField')}
-				/>
-			</div>
-		);
+		switch (this.state.subTab) {
+			case 'Default': {
+				return (
+					<Default
+						switchSubTab={(subtab: string) => { this.switchSubTab(subtab); }}
+					/>
+				);
+			}
+			case 'NewField': {
+				return (
+					<NewField
+						switchSubTab={(subtab: string) => { this.switchSubTab(subtab); }}
+					/>
+				);
+			}
+			default: {
+				return (
+					<div>404 Page Not Found</div>
+				);
+			}
+		}
 	}
 }
 

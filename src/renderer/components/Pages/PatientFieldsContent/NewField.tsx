@@ -38,7 +38,7 @@ const styles = (theme: Theme) =>
 		},
 	});
 
-export interface NewFieldProps extends WithStyles<typeof styles> { switchSubTab: (subtab: string) => void; hidden: boolean }
+export interface NewFieldProps extends WithStyles<typeof styles> { switchSubTab: (subtab: string) => void; }
 
 export interface NewFieldState { fieldType: string; numOptions: number; }
 
@@ -99,7 +99,7 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 			// element in this array. see: https://reactjs.org/docs/lists-and-keys.html
 			this.Options.push(React.createRef());
 			rows.push(
-				<Grid item xs={12} key={i-1} >
+				<Grid item xs={12} sm={6} key={i-1} >
 					<TextField
 						required
 						variant='standard'
@@ -116,7 +116,7 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 	render(): any {
 		const { classes } = this.props;
 		return (
-			<div hidden={this.props.hidden} >
+			<React.Fragment>
 				<IconButton color='primary' onClick={() => { this.props.switchSubTab('Default'); }} >
 					<ArrowBackIcon />
 				</IconButton>Back
@@ -178,7 +178,7 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 					</Grid>
 					<div hidden={this.state.fieldType !== 'MultipleChoice' && this.state.fieldType !== 'CheckBox'} >
 						<Grid container spacing={2} >
-							<Grid item xs={4} >
+							<Grid item xs={12} >
 								<TextField
 									required
 									variant='standard'
@@ -203,7 +203,7 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 						</Grid>
 					</Grid>
 				</div>
-			</div >
+			</React.Fragment>
 		);
 	}
 }
