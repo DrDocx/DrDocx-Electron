@@ -5,7 +5,9 @@ import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/s
 import clsx from 'clsx';
 
 import Default from './Default';
+import EditFieldGroup from './EditFieldGroup';
 import NewField from './NewField';
+import NewFieldGroup from './NewFieldGroup';
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -13,7 +15,7 @@ const styles = (theme: Theme) =>
 
 export interface PatientFieldsContentProps extends WithStyles<typeof styles> {  }
 
-export interface PatientFieldsContentState { subTab: string; }
+export interface PatientFieldsContentState { subTab: string; currentFieldGroupId: number; }
 
 class PatientFieldsContent extends React.Component<PatientFieldsContentProps, PatientFieldsContentState> {
 
@@ -21,8 +23,10 @@ class PatientFieldsContent extends React.Component<PatientFieldsContentProps, Pa
 		super(props);
 		this.state = {
 			subTab: 'Default',
+			currentFieldGroupId: 0,
 		};
 		this.switchSubTab.bind(this);
+		this.switchCurrentFieldGroupId.bind(this);
 	}
 
 	static getDerivedStateFromProps(props: PatientFieldsContentProps, state: PatientFieldsContentState): object {
@@ -35,6 +39,10 @@ class PatientFieldsContent extends React.Component<PatientFieldsContentProps, Pa
 		this.setState({ subTab: subtab, });
 	}
 
+	switchCurrentFieldGroupId(fieldGroupId: number): void {
+		this.setState({ currentFieldGroupId: fieldGroupId, });
+	}
+
 	render(): any {
 		const { classes } = this.props;
 		switch (this.state.subTab) {
@@ -42,6 +50,22 @@ class PatientFieldsContent extends React.Component<PatientFieldsContentProps, Pa
 				return (
 					<Default
 						switchSubTab={(subtab: string) => { this.switchSubTab(subtab); }}
+						switchCurrentFieldGroupId={(fieldGroupId: number) => { this.switchCurrentFieldGroupId(fieldGroupId); }}
+					/>
+				);
+			}
+			case 'NewFieldGroup': {
+				return (
+					<NewFieldGroup
+						switchSubTab={(subtab: string) => { this.switchSubTab(subtab); }}
+					/>
+				);
+			}
+			case 'EditFieldGroup': {
+				return (
+					<EditFieldGroup
+						switchSubTab={(subtab: string) => { this.switchSubTab(subtab); }}
+						currentFieldGroupId={this.state.currentFieldGroupId}
 					/>
 				);
 			}
@@ -49,12 +73,13 @@ class PatientFieldsContent extends React.Component<PatientFieldsContentProps, Pa
 				return (
 					<NewField
 						switchSubTab={(subtab: string) => { this.switchSubTab(subtab); }}
+						currentFieldGroupId={this.state.currentFieldGroupId}
 					/>
 				);
 			}
 			default: {
 				return (
-					<div>404 Page Not Found</div>
+					<div>Page in development</div>
 				);
 			}
 		}

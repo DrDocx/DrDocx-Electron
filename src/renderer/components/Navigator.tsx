@@ -13,6 +13,7 @@ import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import InsertChartIcon from '@material-ui/icons/InsertChart';
 import InputIcon from '@material-ui/icons/Input';
 import PeopleIcon from '@material-ui/icons/People';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import TimerIcon from '@material-ui/icons/Timer';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -33,7 +34,7 @@ var categories = [
   {
     id: 'Settings',
     children: [
-      { id: 'Account', icon: <SettingsIcon /> },
+      { id: 'Account', icon: <AccountCircleIcon /> },
     ],
   },
 ];

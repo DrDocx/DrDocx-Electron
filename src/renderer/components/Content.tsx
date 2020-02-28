@@ -81,7 +81,7 @@ class Content extends React.Component<ContentProps, ContentState> {
 			}
 			default:{
 				return (
-					<div>404 Page Not Found</div>
+					<div>Page in development</div>
 				);
 			}
 		}

@@ -19,68 +19,68 @@ import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/s
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
 const styles = (theme: Theme) =>
-  createStyles({
-    secondaryBar: {
-      zIndex: 0,
-    },
-    menuButton: {
-      marginRight: theme.spacing(1),
-    },
-    iconButtonAvatar: {
-      padding: 4,
-    },
-    link: {
-      textDecoration: 'none',
-      color: lightColor,
-      '&:hover': {
-        color: theme.palette.common.white,
-      },
-    },
-    button: {
-      borderColor: lightColor,
-    },
-    title: {
-      flexGrow: 1,
-    }
-  });
+	createStyles({
+		secondaryBar: {
+			zIndex: 0,
+		},
+		menuButton: {
+			marginRight: theme.spacing(1),
+		},
+		iconButtonAvatar: {
+			padding: 4,
+		},
+		link: {
+			textDecoration: 'none',
+			color: lightColor,
+			'&:hover': {
+				color: theme.palette.common.white,
+			},
+		},
+		button: {
+			borderColor: lightColor,
+		},
+		title: {
+			flexGrow: 1,
+		}
+	});
 
 interface HeaderProps extends WithStyles<typeof styles> { onDrawerToggle: () => void; activeTab: string; }
 
 interface HeaderState { activeTab: string; }
 
-class Header extends React.Component<HeaderProps,HeaderState> {
+class Header extends React.Component<HeaderProps, HeaderState> {
 
-  constructor(props: HeaderProps) {
-    super(props);
-    this.state = {
-      activeTab: props.activeTab,
-    }
-  }
+	constructor(props: HeaderProps) {
+		super(props);
+		this.state = {
+			activeTab: props.activeTab,
+		}
+	}
 
-  static getDerivedStateFromProps(props: HeaderProps,state: HeaderState): object {
-    return {
-      activeTab: props.activeTab,
-    };
-  }
+	static getDerivedStateFromProps(props: HeaderProps, state: HeaderState): object {
+		return {
+			activeTab: props.activeTab,
+		};
+	}
 
-  render(): any {
-    const { classes, onDrawerToggle } = this.props;
+	render(): any {
+		const { classes, onDrawerToggle } = this.props;
 
-    return (
-      <React.Fragment>
-        <AppBar position="static" color = 'primary' >
-    <Toolbar>
-      <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={() => {onDrawerToggle();}} >
-        <MenuIcon />
-      </IconButton>
-      <Typography variant="h6" className={classes.title}>
-        {this.state.activeTab}
-      </Typography>
-    </Toolbar>
-  </AppBar>
-      </React.Fragment>
-    );
-  }
+		return (
+			<React.Fragment>
+				<AppBar position="sticky" color='primary' >
+					<Toolbar>
+						<IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={() => { onDrawerToggle(); }} >
+							<MenuIcon />
+						</IconButton>
+						<Typography variant="h6" className={classes.title}>
+							{this.state.activeTab}
+						</Typography>
+					</Toolbar>
+				</AppBar>
+			</React.Fragment>
+		);
+	}
 }
 
 export default withStyles(styles)(Header);

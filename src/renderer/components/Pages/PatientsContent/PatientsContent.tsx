@@ -5,15 +5,16 @@ import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/s
 import clsx from 'clsx';
 
 import NewPatient from './NewPatient';
-import Default from './Default'
+import Default from './Default';
+import ViewPatientFields from './ViewPatientFields';
 
 const styles = (theme: Theme) =>
 	createStyles({
 	});
 
-export interface PatientsContentProps extends WithStyles<typeof styles> {  }
+export interface PatientsContentProps extends WithStyles<typeof styles> { }
 
-export interface PatientsContentState { subTab: string; }
+export interface PatientsContentState { subTab: string; currentPatientId: number; }
 
 class PatientsContent extends React.Component<PatientsContentProps, PatientsContentState> {
 
@@ -21,8 +22,10 @@ class PatientsContent extends React.Component<PatientsContentProps, PatientsCont
 		super(props);
 		this.state = {
 			subTab: 'Default',
+			currentPatientId: 0,
 		};
 		this.switchSubTab.bind(this);
+		this.switchCurrentPatientId.bind(this);
 	}
 
 	static getDerivedStateFromProps(props: PatientsContentProps, state: PatientsContentState): object {
@@ -35,6 +38,10 @@ class PatientsContent extends React.Component<PatientsContentProps, PatientsCont
 		this.setState({ subTab: subtab, });
 	}
 
+	switchCurrentPatientId(patientid: number): void {
+		this.setState({ currentPatientId: patientid, });
+	}
+
 	render(): any {
 		const { classes } = this.props;
 		switch (this.state.subTab) {
@@ -42,6 +49,7 @@ class PatientsContent extends React.Component<PatientsContentProps, PatientsCont
 				return (
 					<Default
 						switchSubTab={(subtab: string) => { this.switchSubTab(subtab); }}
+						switchCurrentPatientId={(patientid: number) => { this.switchCurrentPatientId(patientid); }}
 					/>
 				);
 			}
@@ -52,9 +60,17 @@ class PatientsContent extends React.Component<PatientsContentProps, PatientsCont
 					/>
 				);
 			}
+			case 'ViewPatientFields': {
+				return (
+					<ViewPatientFields
+						switchSubTab={(subtab: string) => { this.switchSubTab(subtab); }}
+						currentPatientId = {this.state.currentPatientId}
+					/>
+				);
+			}
 			default: {
 				return (
-					<div>404 Page Not Found</div>
+					<div>Page in development</div>
 				);
 			}
 		}

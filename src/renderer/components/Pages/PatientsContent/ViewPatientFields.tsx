@@ -32,39 +32,39 @@ const styles = (theme: Theme) =>
 		}
 	});
 
-export interface NewPatientProps extends WithStyles<typeof styles> { switchSubTab: (subtab: string) => void; }
+export interface ViewPatientProps extends WithStyles<typeof styles> {
+	switchSubTab: (subtab: string) => void;
+	currentPatientId: number;
+}
 
-export interface NewPatientState { dateOfBirth: Date; }
+export interface ViewPatientState { }
 
-class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
+class ViewPatient extends React.Component<ViewPatientProps, ViewPatientState> {
 
 	private Name: React.RefObject<any>;
 	private DateOfBirth: React.RefObject<any>;
 	private Notes: React.RefObject<any>;
-	constructor(props: NewPatientProps) {
+	constructor(props: ViewPatientProps) {
 		super(props);
-		this.state = {
-			dateOfBirth: new Date(),
-		};
-		this.submit.bind(this);
 		this.Name = React.createRef();
 		this.DateOfBirth = React.createRef();
 		this.Notes = React.createRef();
 	}
 
-	async submit(): Promise<PatientInfo | null> {
-		let newPatient: object = {
-			'name':this.Name.current.value,
-			'dateModified':new Date() as unknown as string,
-			'fields': [{'Symptom':this.Notes.current.value}],
-		};
-		let rest: rm.RestClient = new rm.RestClient('add-patient', 'https://localhost:1211/', undefined, { ignoreSslError: true });
-		let res: rm.IRestResponse<PatientInfo> = await rest.create<PatientInfo>('api/Patient',newPatient);
-		this.Name.current.value = '';
-		this.setState({dateOfBirth: new Date(),});
-		this.Notes.current.value='';
-		this.props.switchSubTab('Default');
-		return res.result;
+	componentDidMount(): void {
+		this.getPatient().then((value: PatientInfo) => {
+			this.Name.current.value = value.name;
+		});
+	}
+
+	async getPatient(): Promise<PatientInfo> {
+		let rest: rm.RestClient = new rm.RestClient('get-patient', 'https://localhost:1211/', undefined, { ignoreSslError: true });
+		let res: rm.IRestResponse<PatientInfo> = await rest.get<PatientInfo>('api/Patient/' + this.props.currentPatientId as string);
+		if (res.result) {
+			return res.result;
+		} else {
+			return { name: 'Something went wrong', dateModified: 'undefined', id: -1, };
+		}
 	}
 
 	render(): any {
@@ -75,32 +75,29 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 					<ArrowBackIcon />
 				</IconButton>Back
 					<div className={clsx(classes.contentWrapper, classes.centerContent)} >
-					<Typography variant="h6" gutterBottom>
-						New Patient
-					</Typography>
 					<Grid container spacing={2} >
 						<Grid item xs={12} sm={6}>
 							<TextField
-								required
+								disabled
+								value='stuff'
 								variant='standard'
 								id="Name"
 								label="Name"
 								fullWidth
-								autoComplete="name"
 								inputRef={this.Name}
 							/>
 						</Grid>
 						<Grid item xs={12} sm={6} >
 							<MuiPickersUtilsProvider utils={DateFnsUtils}>
 								<KeyboardDatePicker
-									required
+									disabled
 									variant='dialog'
 									margin="none"
 									id="DateOfBirth"
 									label="Date of Birth"
 									format="MM/dd/yyyy"
-									value={this.state.dateOfBirth}
-									onChange={(date: MaterialUiPickersDate) => { this.setState({ dateOfBirth: date as Date, }); }}
+									value={new Date()}
+									onChange={() => { }}
 									KeyboardButtonProps={{
 										'aria-label': 'change date',
 									}}
@@ -109,6 +106,8 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 						</Grid>
 						<Grid item xs={12} >
 							<TextField
+								disabled
+								value='stuff'
 								id='Notes'
 								label='Notes'
 								variant='outlined'
@@ -121,11 +120,8 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 						</Grid>
 					</Grid>
 					<Grid container spacing={2}>
-						<Grid item xs={6}>
-							<Button variant='contained' color='primary' ><AddIcon />Field</Button>
-						</Grid>
-						<Grid item container xs={6} justify='flex-end' >
-							<Button variant='contained' color='primary' onClick={()=>this.submit()} >Submit</Button>
+						<Grid item container xs={12} justify='flex-end' >
+							<Button variant='contained' color='primary' >Edit Patient</Button>
 						</Grid>
 					</Grid>
 				</div>
@@ -134,4 +130,4 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 	}
 }
 
-export default withStyles(styles)(NewPatient);
+export default withStyles(styles)(ViewPatient);

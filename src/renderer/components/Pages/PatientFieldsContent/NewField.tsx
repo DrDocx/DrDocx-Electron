@@ -16,6 +16,10 @@ import SubjectIcon from '@material-ui/icons/Subject';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
+import {Field} from '../../Models/Field';
+
+import * as rm from 'typed-rest-client/RestClient';
+
 import clsx from 'clsx';
 import { th } from 'date-fns/locale';
 
@@ -38,7 +42,7 @@ const styles = (theme: Theme) =>
 		},
 	});
 
-export interface NewFieldProps extends WithStyles<typeof styles> { switchSubTab: (subtab: string) => void; }
+export interface NewFieldProps extends WithStyles<typeof styles> { switchSubTab: (subtab: string) => void; currentFieldGroupId: number; }
 
 export interface NewFieldState { fieldType: string; numOptions: number; }
 
@@ -60,30 +64,29 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 		this.Options = [];
 	}
 
-	submit(): void {
+	async submit(): Promise<Field | null> {
 		if (this.state.fieldType !== 'None') {
 			let options: string[] = [];
-			if(this.state.fieldType === 'MultipleChoice' || this.state.fieldType === 'CheckBox'){
-				for(var i =0;i<this.state.numOptions;i++){
-						options.push(this.Options[i].current.value);
+			if (this.state.fieldType === 'MultipleChoice' || this.state.fieldType === 'CheckBox') {
+				for (var i = 0; i < this.state.numOptions; i++) {
+					options.push(this.Options[i].current.value);
 				}
 			}
 
-			if(this.Options[0].current.value)
-				this.Options[0].current.value='';
+			let newField: object = {
+				fieldGroupId: this.props.currentFieldGroupId,
+				name: this.FieldName.current.value,
+				type: this.state.fieldType
+			};
 
-			console.log(JSON.stringify({
-				'fieldName': this.FieldName.current.value,
-				'fieldType': this.state.fieldType,
-				'options': options,
-			}));
-			this.setState({ fieldType: 'None', numOptions:1, });
-			this.NumOptions.current.value=1;
-			this.FieldName.current.value = '';
-			this.ErrorText.current.innerText = '';
-			this.props.switchSubTab('Default');
+			let rest: rm.RestClient = new rm.RestClient('create-field', 'https://localhost:1211/', undefined, { ignoreSslError: true });
+			let res: rm.IRestResponse<Field> = await rest.create<Field>('api/Field', newField);
+
+			this.props.switchSubTab('EditFieldGroup');
+			return res.result;
 		} else {
 			this.ErrorText.current.innerText = 'Please select a field type.';
+			return null;
 		}
 	}
 
@@ -99,13 +102,13 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 			// element in this array. see: https://reactjs.org/docs/lists-and-keys.html
 			this.Options.push(React.createRef());
 			rows.push(
-				<Grid item xs={12} sm={6} key={i-1} >
+				<Grid item xs={12} sm={6} key={i - 1} >
 					<TextField
 						required
 						variant='standard'
 						id={"Option" + i as string}
 						label={"Option " + i as string}
-						inputRef={this.Options[i-1]}
+						inputRef={this.Options[i - 1]}
 					/>
 				</Grid>
 			);
@@ -117,10 +120,10 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 		const { classes } = this.props;
 		return (
 			<React.Fragment>
-				<IconButton color='primary' onClick={() => { this.props.switchSubTab('Default'); }} >
+				<IconButton color='primary' onClick={() => { this.props.switchSubTab('EditFieldGroup'); }} >
 					<ArrowBackIcon />
 				</IconButton>Back
-					<div className={clsx(classes.contentWrapper, classes.centerContent)} >
+				<div className={clsx(classes.contentWrapper, classes.centerContent)} >
 					<Typography variant="h6" gutterBottom>
 						New Field
 					</Typography>

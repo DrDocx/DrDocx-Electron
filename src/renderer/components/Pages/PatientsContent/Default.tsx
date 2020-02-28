@@ -15,6 +15,9 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import InputIcon from '@material-ui/icons/Input';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 
 import { IconButton, Card, CardContent } from '@material-ui/core';
 
@@ -61,7 +64,10 @@ const styles = (theme: Theme) =>
 		},
 	});
 
-export interface DefaultProps extends WithStyles<typeof styles> { switchSubTab: (subtab: string) => void; }
+export interface DefaultProps extends WithStyles<typeof styles> {
+	switchSubTab: (subtab: string) => void;
+	switchCurrentPatientId: (patientid: number) => void;
+}
 
 export interface DefaultState { patientsInfo: PatientInfo[]; }
 
@@ -93,7 +99,7 @@ class Default extends React.Component<DefaultProps, DefaultState> {
 		this.setState({
 			patientsInfo: this.state.patientsInfo.filter((patientInfo: PatientInfo) => { return patientInfo.id !== id })
 		});
-		let rest: rm.RestClient = new rm.RestClient('get-patients', 'https://localhost:1211/', undefined, { ignoreSslError: true });
+		let rest: rm.RestClient = new rm.RestClient('del-patient', 'https://localhost:1211/', undefined, { ignoreSslError: true });
 		let res: rm.IRestResponse<PatientInfo[]> = await rest.del<PatientInfo[]>('api/Patient/' + id as string);
 	}
 
@@ -111,7 +117,7 @@ class Default extends React.Component<DefaultProps, DefaultState> {
 							<Grid item xs>
 								<TextField
 									fullWidth
-									placeholder="Search by name"
+									placeholder="Search Patients"
 									InputProps={{
 										disableUnderline: true,
 										className: classes.searchInput,
@@ -141,15 +147,22 @@ class Default extends React.Component<DefaultProps, DefaultState> {
 									key={patientInfo.id}
 								>
 									<TableCell align='left' >
-										<Checkbox color='primary' />
 										{patientInfo.name}
 									</TableCell>
 									<TableCell align='right' >
 										Modified {format(parseISO(patientInfo.dateModified), 'MM/dd/yyyy')}
 									</TableCell>
 									<TableCell align='right' >
+										<IconButton color='primary'
+											onClick={() => {
+												this.props.switchCurrentPatientId(patientInfo.id);
+												this.props.switchSubTab('ViewPatientFields');
+											}}
+										>
+											<InputIcon />
+										</IconButton>
 										<IconButton color='primary' >
-											<EditIcon />
+											<AssignmentIndIcon />
 										</IconButton>
 										<IconButton color='primary' onClick={() => this.deletePatient(patientInfo.id)} >
 											<DeleteIcon />
@@ -164,7 +177,7 @@ class Default extends React.Component<DefaultProps, DefaultState> {
 					<div className={classes.contentWrapper}>
 						<Typography color="textSecondary" align="center">
 							No patients yet
-					</Typography>
+						</Typography>
 					</div>
 				}
 			</Paper>
