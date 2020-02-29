@@ -12,7 +12,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { IconButton, Card, CardContent } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -135,16 +135,20 @@ class Default extends React.Component<DefaultProps, DefaultState> {
 										{fieldGroup.name}
 									</TableCell>
 									<TableCell align='right' >
-										<IconButton color='primary' onClick={() => {
-											this.props.switchSubTab('EditFieldGroup');
-											this.props.switchCurrentFieldGroupId(fieldGroup.id);
-										}}
-										>
-											<EditIcon />
-										</IconButton>
-										<IconButton color='primary' onClick={() => { this.deleteFieldGroup(fieldGroup.id); }} >
-											<DeleteIcon />
-										</IconButton>
+										<Tooltip title='Edit' >
+											<IconButton color='primary' onClick={() => {
+												this.props.switchSubTab('EditFieldGroup');
+												this.props.switchCurrentFieldGroupId(fieldGroup.id);
+											}}
+											>
+												<EditIcon />
+											</IconButton>
+										</Tooltip>
+										<Tooltip title='Delete' >
+											<IconButton color='primary' onClick={() => { this.deleteFieldGroup(fieldGroup.id); }} >
+												<DeleteIcon />
+											</IconButton>
+										</Tooltip>
 									</TableCell>
 								</TableRow>
 							))}

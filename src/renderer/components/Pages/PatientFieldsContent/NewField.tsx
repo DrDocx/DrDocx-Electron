@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
@@ -16,7 +16,7 @@ import SubjectIcon from '@material-ui/icons/Subject';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
-import {Field} from '../../Models/Field';
+import { Field } from '../../Models/Field';
 
 import * as rm from 'typed-rest-client/RestClient';
 
@@ -44,34 +44,23 @@ const styles = (theme: Theme) =>
 
 export interface NewFieldProps extends WithStyles<typeof styles> { switchSubTab: (subtab: string) => void; currentFieldGroupId: number; }
 
-export interface NewFieldState { fieldType: string; numOptions: number; }
+export interface NewFieldState { fieldType: string; }
 
 class NewField extends React.Component<NewFieldProps, NewFieldState> {
 
 	private FieldName: React.RefObject<any>;
-	private NumOptions: React.RefObject<any>;
 	private ErrorText: React.RefObject<any>;
-	private Options: React.RefObject<any>[];
 	constructor(props: NewFieldProps) {
 		super(props);
 		this.state = {
 			fieldType: 'None',
-			numOptions: 1,
 		};
 		this.FieldName = React.createRef();
 		this.ErrorText = React.createRef();
-		this.NumOptions = React.createRef();
-		this.Options = [];
 	}
 
 	async submit(): Promise<Field | null> {
 		if (this.state.fieldType !== 'None') {
-			let options: string[] = [];
-			if (this.state.fieldType === 'MultipleChoice' || this.state.fieldType === 'CheckBox') {
-				for (var i = 0; i < this.state.numOptions; i++) {
-					options.push(this.Options[i].current.value);
-				}
-			}
 
 			let newField: object = {
 				fieldGroupId: this.props.currentFieldGroupId,
@@ -93,27 +82,6 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 	selectFieldType(fieldtype: string): void {
 		this.setState({ fieldType: fieldtype });
 		this.ErrorText.current.innerText = '';
-	}
-
-	displayOptions(): any {
-		var rows = [];
-		for (var i = 1; i <= this.state.numOptions; i++) {
-			// note: we add a key prop here to allow react to uniquely identify each
-			// element in this array. see: https://reactjs.org/docs/lists-and-keys.html
-			this.Options.push(React.createRef());
-			rows.push(
-				<Grid item xs={12} sm={6} key={i - 1} >
-					<TextField
-						required
-						variant='standard'
-						id={"Option" + i as string}
-						label={"Option " + i as string}
-						inputRef={this.Options[i - 1]}
-					/>
-				</Grid>
-			);
-		}
-		return <React.Fragment>{rows}</React.Fragment>;
 	}
 
 	render(): any {
@@ -139,64 +107,36 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 							/>
 						</Grid>
 						<Grid item xs={4} sm={2}>
-							<IconButton
-								className={this.state.fieldType === 'Date' ? classes.selected : classes.unSelected}
-								onClick={() => this.selectFieldType('Date')}
-							>
-								<TodayIcon />
-							</IconButton>
+							<Tooltip title='Date' >
+								<IconButton
+									className={this.state.fieldType === 'Date' ? classes.selected : classes.unSelected}
+									onClick={() => this.selectFieldType('Date')}
+								>
+									<TodayIcon />
+								</IconButton>
+							</Tooltip>
 						</Grid>
 						<Grid item xs={4} sm={2}>
-							<IconButton
-								className={this.state.fieldType === 'SmallText' ? classes.selected : classes.unSelected}
-								onClick={() => this.selectFieldType('SmallText')}
-							>
-								<TextFieldsIcon />
-							</IconButton>
+							<Tooltip title='Text' >
+								<IconButton
+									className={this.state.fieldType === 'SmallText' ? classes.selected : classes.unSelected}
+									onClick={() => this.selectFieldType('SmallText')}
+								>
+									<TextFieldsIcon />
+								</IconButton>
+							</Tooltip>
 						</Grid>
 						<Grid item xs={4} sm={2}>
-							<IconButton
-								className={this.state.fieldType === 'LargeText' ? classes.selected : classes.unSelected}
-								onClick={() => this.selectFieldType('LargeText')}
-							>
-								<SubjectIcon />
-							</IconButton>
-						</Grid>
-						<Grid item xs={4} sm={2}>
-							<IconButton
-								className={this.state.fieldType === 'MultipleChoice' ? classes.selected : classes.unSelected}
-								onClick={() => this.selectFieldType('MultipleChoice')}
-							>
-								<RadioButtonCheckedIcon />
-							</IconButton>
-						</Grid>
-						<Grid item xs={4} sm={2}>
-							<IconButton
-								className={this.state.fieldType === 'CheckBox' ? classes.selected : classes.unSelected}
-								onClick={() => this.selectFieldType('CheckBox')}
-							>
-								<CheckBoxIcon />
-							</IconButton>
+							<Tooltip title='Paragraph' >
+								<IconButton
+									className={this.state.fieldType === 'LargeText' ? classes.selected : classes.unSelected}
+									onClick={() => this.selectFieldType('LargeText')}
+								>
+									<SubjectIcon />
+								</IconButton>
+							</Tooltip>
 						</Grid>
 					</Grid>
-					<div hidden={this.state.fieldType !== 'MultipleChoice' && this.state.fieldType !== 'CheckBox'} >
-						<Grid container spacing={2} >
-							<Grid item xs={12} >
-								<TextField
-									required
-									variant='standard'
-									id="NumOptions"
-									label="# of Options"
-									type='number'
-									fullWidth
-									inputRef={this.NumOptions}
-									InputProps={{ inputProps: { min: 1, max: 100 } }}
-									onChange={() => this.setState({ numOptions: (+this.NumOptions.current.value), })}
-								/>
-							</Grid>
-							{this.displayOptions()}
-						</Grid>
-					</div>
 					<Grid container spacing={2} >
 						<Grid item container xs={12} justify='flex-end' >
 							<Button variant='contained' color='primary' onClick={() => this.submit()} >Add Field</Button>

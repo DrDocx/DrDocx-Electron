@@ -19,7 +19,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import InputIcon from '@material-ui/icons/Input';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 
-import { IconButton, Card, CardContent } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -153,20 +153,26 @@ class Default extends React.Component<DefaultProps, DefaultState> {
 										Modified {format(parseISO(patientInfo.dateModified), 'MM/dd/yyyy')}
 									</TableCell>
 									<TableCell align='right' >
+										<Tooltip title='View Patient' >
 										<IconButton color='primary'
 											onClick={() => {
 												this.props.switchCurrentPatientId(patientInfo.id);
 												this.props.switchSubTab('ViewPatientFields');
 											}}
 										>
-											<InputIcon />
+											<VisibilityIcon />
 										</IconButton>
-										<IconButton color='primary' >
-											<AssignmentIndIcon />
-										</IconButton>
-										<IconButton color='primary' onClick={() => this.deletePatient(patientInfo.id)} >
-											<DeleteIcon />
-										</IconButton>
+										</Tooltip>
+										<Tooltip title='Test Results'>
+											<IconButton color='primary' >
+												<AssignmentIndIcon />
+											</IconButton>
+										</Tooltip>
+										<Tooltip title='Delete' >
+											<IconButton color='primary' onClick={() => this.deletePatient(patientInfo.id)} >
+												<DeleteIcon />
+											</IconButton>
+										</Tooltip>
 									</TableCell>
 								</TableRow>
 							))}

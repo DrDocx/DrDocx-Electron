@@ -18,7 +18,7 @@ import SubjectIcon from '@material-ui/icons/Subject';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
-import { IconButton, Card, CardContent } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -154,36 +154,48 @@ class EditFieldGroup extends React.Component<EditFieldGroupProps, EditFieldGroup
 												{field.name}
 											</TableCell>
 											<TableCell align='right' >
-												<IconButton color='primary' onClick={() => {
-												}}
-												>
-
-												{field.type === 'CheckBox' && <CheckBoxIcon />}
-												{field.type === 'MultipleChoice' && <RadioButtonCheckedIcon />}
-												{field.type === 'Date' && <TodayIcon />}
-												{field.type === 'SmallText' && <TextFieldsIcon />}
-												{field.type === 'LargeText' && <SubjectIcon />}
-
-												</IconButton>
+												{field.type === 'Date' &&
+													<Tooltip title='Date' >
+														<IconButton color='primary' >
+															<TodayIcon />
+														</IconButton>
+													</Tooltip>
+												}
+												{field.type === 'SmallText' &&
+													<Tooltip title='Text' >
+														<IconButton color='primary' >
+															<TextFieldsIcon />
+														</IconButton>
+													</Tooltip>
+												}
+												{field.type === 'LargeText' &&
+													<Tooltip title='Paragraph' >
+														<IconButton color='primary' >
+															<SubjectIcon />
+														</IconButton>
+													</Tooltip>
+												}
+											<Tooltip title='Delete' >
 												<IconButton color='primary' onClick={() => { this.deleteField(field.id) }} >
 													<DeleteIcon />
 												</IconButton>
+											</Tooltip>
 											</TableCell>
 										</TableRow>
-									))}
+								))}
 								</TableBody>
 							</Table>
-						}
+					}
 						{this.state.fields.length === 0 &&
-							<div className={classes.contentWrapper}>
-								<Typography color="textSecondary" align="center">
-									No fields yet
+						<div className={classes.contentWrapper}>
+							<Typography color="textSecondary" align="center">
+								No fields yet
 						</Typography>
-							</div>
-						}
+						</div>
+					}
 					</Paper>
 				</div>
-			</React.Fragment>
+			</React.Fragment >
 		);
 	}
 }
