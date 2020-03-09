@@ -9,12 +9,6 @@ import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/s
 import { IconButton } from '@material-ui/core';
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import AddIcon from '@material-ui/icons/Add';
-import TodayIcon from '@material-ui/icons/Today';
-import TextFieldsIcon from '@material-ui/icons/TextFields';
-import SubjectIcon from '@material-ui/icons/Subject';
-import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
 import clsx from 'clsx';
 import * as rm from 'typed-rest-client/RestClient';
@@ -85,7 +79,7 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 				<IconButton color='primary' onClick={() => { this.props.switchSubTab('Default'); }} >
 					<ArrowBackIcon />
 				</IconButton>Back
-					<div className={clsx(classes.contentWrapper, classes.centerContent)} >
+					<form onSubmit={(e: any) => {e.preventDefault();this.submit();}} className={clsx(classes.contentWrapper, classes.centerContent)} >
 					<Typography variant="h6" gutterBottom>
 						New Field Group
 					</Typography>
@@ -103,13 +97,13 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 					</Grid>
 					<Grid container spacing={2} >
 						<Grid item container xs={12} justify='flex-end' >
-							<Button variant='contained' color='primary' onClick={() => this.submit()} >Add Field</Button>
+							<Button type='submit' variant='contained' color='primary' >Add Field Group</Button>
 						</Grid>
 						<Grid item container xs={12} >
 							<Typography color='error' ref={this.ErrorText} ></Typography>
 						</Grid>
 					</Grid>
-				</div>
+				</form>
 			</React.Fragment>
 		);
 	}
