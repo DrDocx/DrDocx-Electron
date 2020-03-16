@@ -19,6 +19,7 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { Field } from '../../Models/Field';
 
 import * as rm from 'typed-rest-client/RestClient';
+import fetch from 'cross-fetch';
 
 import clsx from 'clsx';
 import { th } from 'date-fns/locale';
@@ -68,8 +69,13 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 				type: this.state.fieldType
 			};
 
+			console.log(newField);
+
 			let rest: rm.RestClient = new rm.RestClient('create-field', 'https://localhost:1211/', undefined, { ignoreSslError: true });
+			console.log("requestStart");
 			let res: rm.IRestResponse<Field> = await rest.create<Field>('api/Field', newField);
+
+			console.log("requestEnd");
 
 			this.props.switchSubTab('EditFieldGroup');
 			return res.result;
@@ -139,7 +145,7 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 					</Grid>
 					<Grid container spacing={2} >
 						<Grid item container xs={12} justify='flex-end' >
-							<Button variant='contained' color='primary' onClick={() => this.submit()} >Add Field</Button>
+							<Button variant='contained' color='primary' onClick={() => {this.submit();console.log("submit")}} >Add Field</Button>
 						</Grid>
 						<Grid item container xs={12} >
 							<Typography color='error' ref={this.ErrorText} ></Typography>

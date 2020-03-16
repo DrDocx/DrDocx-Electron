@@ -154,14 +154,14 @@ class Default extends React.Component<DefaultProps, DefaultState> {
 									</TableCell>
 									<TableCell align='right' >
 										<Tooltip title='View Patient' >
-										<IconButton color='primary'
-											onClick={() => {
-												this.props.switchCurrentPatientId(patientInfo.id);
-												this.props.switchSubTab('ViewPatientFields');
-											}}
-										>
-											<VisibilityIcon />
-										</IconButton>
+											<IconButton color='primary'
+												onClick={() => {
+													this.props.switchCurrentPatientId(patientInfo.id);
+													this.props.switchSubTab('ViewPatientFields');
+												}}
+											>
+												<VisibilityIcon />
+											</IconButton>
 										</Tooltip>
 										<Tooltip title='Test Results'>
 											<IconButton color='primary' >

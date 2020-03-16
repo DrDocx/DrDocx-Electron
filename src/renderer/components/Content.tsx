@@ -3,8 +3,10 @@ import * as React from 'react';
 import { Button } from '@material-ui/core'
 
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+
 import PatientsContent from './Pages/PatientsContent/PatientsContent';
 import PatientFieldsContent from './Pages/PatientFieldsContent/PatientFieldsContent';
+import TemplatesContent from './Pages/TemplatesContent/TemplatesContent';
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -64,19 +66,7 @@ class Content extends React.Component<ContentProps, ContentState> {
 			}
 			case 'Templates': {
 				return (
-					<React.Fragment>
-						<Button
-							variant="contained"
-							component="label"
-							color='primary'
-						>
-							Upload Template
-  						<input
-								type="file"
-								style={{ display: "none" }}
-							/>
-						</Button>
-					</React.Fragment>
+					<TemplatesContent />
 				);
 			}
 			default:{
