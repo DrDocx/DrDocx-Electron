@@ -69,13 +69,8 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 				type: this.state.fieldType
 			};
 
-			console.log(newField);
-
 			let rest: rm.RestClient = new rm.RestClient('create-field', 'https://localhost:1211/', undefined, { ignoreSslError: true });
-			console.log("requestStart");
 			let res: rm.IRestResponse<Field> = await rest.create<Field>('api/Field', newField);
-
-			console.log("requestEnd");
 
 			this.props.switchSubTab('EditFieldGroup');
 			return res.result;
@@ -125,8 +120,8 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 						<Grid item xs={4} sm={2}>
 							<Tooltip title='Text' >
 								<IconButton
-									className={this.state.fieldType === 'SmallText' ? classes.selected : classes.unSelected}
-									onClick={() => this.selectFieldType('SmallText')}
+									className={this.state.fieldType === 'Text' ? classes.selected : classes.unSelected}
+									onClick={() => this.selectFieldType('Text')}
 								>
 									<TextFieldsIcon />
 								</IconButton>
@@ -135,8 +130,8 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 						<Grid item xs={4} sm={2}>
 							<Tooltip title='Paragraph' >
 								<IconButton
-									className={this.state.fieldType === 'LargeText' ? classes.selected : classes.unSelected}
-									onClick={() => this.selectFieldType('LargeText')}
+									className={this.state.fieldType === 'Paragraph' ? classes.selected : classes.unSelected}
+									onClick={() => this.selectFieldType('Paragraph')}
 								>
 									<SubjectIcon />
 								</IconButton>
@@ -145,7 +140,7 @@ class NewField extends React.Component<NewFieldProps, NewFieldState> {
 					</Grid>
 					<Grid container spacing={2} >
 						<Grid item container xs={12} justify='flex-end' >
-							<Button variant='contained' color='primary' onClick={() => {this.submit();console.log("submit")}} >Add Field</Button>
+							<Button variant='contained' color='primary' onClick={() => this.submit()} >Add Field</Button>
 						</Grid>
 						<Grid item container xs={12} >
 							<Typography color='error' ref={this.ErrorText} ></Typography>

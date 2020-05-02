@@ -161,14 +161,14 @@ class EditFieldGroup extends React.Component<EditFieldGroupProps, EditFieldGroup
 														</IconButton>
 													</Tooltip>
 												}
-												{field.type === 'SmallText' &&
+												{field.type === 'Text' &&
 													<Tooltip title='Text' >
 														<IconButton color='primary' >
 															<TextFieldsIcon />
 														</IconButton>
 													</Tooltip>
 												}
-												{field.type === 'LargeText' &&
+												{field.type === 'Paragraph' &&
 													<Tooltip title='Paragraph' >
 														<IconButton color='primary' >
 															<SubjectIcon />

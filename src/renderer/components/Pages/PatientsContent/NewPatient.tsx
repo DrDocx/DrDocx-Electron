@@ -20,6 +20,7 @@ import {
 
 import clsx from 'clsx';
 
+import fetch from 'cross-fetch';
 import * as rm from 'typed-rest-client/RestClient';
 
 import { PatientInfo } from '../../Models/Patient'
@@ -68,22 +69,64 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 		this.getFieldGroups().then((value: FieldGroup[]) => this.setState({ fieldGroups: value, }));
 	}
 
-	async submit(): Promise<PatientInfo | null> {
-		let newPatient: object = {
-			'name': this.Name.current.value,
-			'dateModified': new Date() as unknown as string,
-			'fields': [],
-		};
-		Object.keys(this.FieldValueGroups).forEach((id: string) => {
-			Object.keys(this.FieldValueGroups[id]).forEach((key: string) => {
-				console.log(this.FieldValueGroups[id][key].current.value);
-			})
-		})
+	async addFieldValueGroup(newFieldValueGroup: any): Promise<number> {
 		let rest: rm.RestClient = new rm.RestClient('add-patient', 'https://localhost:1211/', undefined, { ignoreSslError: true });
-		let res: rm.IRestResponse<PatientInfo> = await rest.create<PatientInfo>('api/Patient', newPatient);
-		this.Name.current.value = '';
+		let res: rm.IRestResponse<any> = await rest.create<any>('api/FieldValueGroup', newFieldValueGroup);
+		return res.result!.id;
+	}
+
+	async addFieldValue(newFieldValue: any): Promise<null> {
+		let rest: rm.RestClient = new rm.RestClient('add-patient', 'https://localhost:1211/', undefined, { ignoreSslError: true });
+		let res: rm.IRestResponse<any> = await rest.create<any>('api/FieldValue', newFieldValue);
+		return null;
+	}
+
+	async submit(): Promise<null> { // DO NOT TOUCH THIS FUNCTION
+		let newPatient: any = {
+			'name': this.Name.current.value,
+			'dateModified': (new Date()).toISOString(),
+		};
+		let rest: rm.RestClient = new rm.RestClient('add-patient', 'https://localhost:1211/', undefined, { ignoreSslError: true });
+		let res: rm.IRestResponse<any> = await rest.create<any>('api/Patient', newPatient);
+		let patientId: number = res.result!.id;
+
+		var idMap: number[] = [];
+		let i = 0;
+
+		let vals: any = {}
+
+		Object.keys(this.FieldValueGroups).forEach((id: string) => {
+			vals[id] = {};
+			Object.keys(this.FieldValueGroups[id]).forEach((key: string) => {
+				vals[id][key] = this.FieldValueGroups[id][key].current.value;
+			});
+		});
+
+
+		Object.keys(this.FieldValueGroups).forEach(async (id: string) => {
+			let newFieldValueGroup: any = {
+				'FieldGroupId': Number(id),
+				'PatientId': patientId,
+			};
+			let response: number = await this.addFieldValueGroup(newFieldValueGroup);
+			idMap.push(response);
+
+			Object.keys(this.FieldValueGroups[id]).forEach(async (fieldId: string) => {
+				
+				let newFieldValue: any = {
+					'ParentGroupId': idMap[i],
+					'FieldId': Number(fieldId),
+					'FieldTextValue': vals[id][fieldId],
+				}
+				await this.addFieldValue(newFieldValue);
+			})
+
+
+			i++;
+		})
+		
 		this.props.switchSubTab('Default');
-		return res.result;
+		return null;
 	}
 
 	async getFieldGroups(): Promise<FieldGroup[]> {
@@ -160,7 +203,7 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 								</Grid>
 								{fieldGroup.fields.map((field: Field) => (
 									<React.Fragment key={field.id} >
-										{field.type === 'SmallText' &&
+										{field.type === 'Text' &&
 											<Grid item xs={12} sm={6} >
 												<TextField
 													id={field.name}
@@ -170,7 +213,7 @@ class NewPatient extends React.Component<NewPatientProps, NewPatientState> {
 												/>
 											</Grid>
 										}
-										{field.type === 'LargeText' &&
+										{field.type === 'Paragraph' &&
 											<Grid item xs={12} >
 												<TextField
 													id={field.name}
