@@ -94,7 +94,6 @@
     "@types/jest": "^24.0.13",
     "@types/react": "^16.8.18",
     "@types/react-dom": "^16.8.4",
-    "@types/react-redux": "^7.0.9",
     "@types/react-test-renderer": "^16.8.1",
     "@types/webdriverio": "^4.8.7",
     "@types/webpack-env": "^1.13.3",
@@ -125,8 +124,6 @@
     "prettier": "^1.18.2",
     "react-hot-loader": "^4.8.8",
     "react-test-renderer": "^16.8.6",
-    "redux-devtools": "^3.5.0",
-    "redux-devtools-extension": "^2.13.5",
     "sass-loader": "^7.1.0",
     "source-map-loader": "^0.2.4",
     "spectron": "^5.0.0",
@@ -150,8 +147,6 @@
     "form-data": "^3.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-redux": "^7.2.0",
-    "redux": "^4.0.5",
     "request": "^2.88.2",
     "typed-rest-client": "^1.7.1"
   }
